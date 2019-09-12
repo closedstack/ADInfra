@@ -2,6 +2,7 @@
 #Watch the debug.. scrolling text soothes anxiety whether the script is working
 $DebugPreference = 'Continue'
 Import-Module DhcpServer
+$outputFile = "c:\reports\DHCPInventory.csv"
 Function Get-DHCPServerScopes{
 PARAM(
 $DHCPServer
@@ -16,6 +17,7 @@ $DHCPServer
         Write-Debug "Options for $($scope.ScopeId)"
         $options = Get-DhcpServerv4OptionValue -ComputerName $DHCPServer -ScopeId $scope.ScopeId
         $DNSOptions = Get-DhcpServerv4DnsSetting -ComputerName $DHCPServer -ScopeId $($scope.ScopeId)
+        #If there is no failover relationship for scope, it will throw and error, which is fine - we just have no value in that column
         $failover = Get-DhcpServerv4Failover -ScopeId $($scope.ScopeId) -ComputerName $DHCPServer -ErrorAction Continue
         $option51 = $options | where {$_.OptionId -eq 51}
         $option15 = $options | where {$_.OptionId -eq 15}
@@ -52,5 +54,5 @@ $allDHCPScopes = @()
 foreach($server in $DHCPServers){
     Write-Debug "Working on Server $($server.DnsName)"
     $allDHCPScopes += Get-DHCPServerScopes -DHCPServer $server.DnsName
-
 }
+Export-CSV -NoTypeInformation -Path $outputFile
