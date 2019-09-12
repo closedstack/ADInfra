@@ -24,6 +24,7 @@ $DHCPServer
         $option6 = $options | where {$_.OptionId -eq 6}
         $hash = [ordered]@{
           DHCPServerName = "$DHCPServer"
+          ScopeID = "$($scope.ScopeId)"
           ServerOption81 = "$($SvrOption81.value)"
           ServerOption6 = "$($SvrOption6.value)"
           LeaseDuration = "$($option51.Value)"
