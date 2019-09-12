@@ -25,6 +25,8 @@ $DHCPServer
         $hash = [ordered]@{
           DHCPServerName = "$DHCPServer"
           ScopeID = "$($scope.ScopeId)"
+          ScopeName = "$($scope.Name)"
+          ScopeDescription = "$($scope.Description)"
           ServerOption81 = "$($SvrOption81.value)"
           ServerOption6 = "$($SvrOption6.value)"
           LeaseDuration = "$($option51.Value)"
@@ -56,4 +58,4 @@ foreach($server in $DHCPServers){
     Write-Debug "Working on Server $($server.DnsName)"
     $allDHCPScopes += Get-DHCPServerScopes -DHCPServer $server.DnsName
 }
-Export-CSV -NoTypeInformation -Path $outputFile
+$allDHCPScopes | Export-CSV -NoTypeInformation -Path $outputFile
